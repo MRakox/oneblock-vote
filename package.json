@@ -1,0 +1,33 @@
+{
+  "name": "oneblock-vote",
+  "version": "0.1.0",
+  "description": "A private automated voting script for the Oneblock Minecraft server.",
+  "main": "index.js",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "DEBUG=puppeteer-extra,puppeteer-extra-plugin:* pnpm start",
+    "start": "node -r dotenv/config index.js"
+  },
+  "author": "Rakox <rakox@zakary.fr>",
+  "dependencies": {
+    "@bull-board/api": "^4.0.1",
+    "@bull-board/fastify": "^4.0.1",
+    "async": "^3.2.4",
+    "axios": "^0.27.2",
+    "bullmq": "^1.86.7",
+    "cron": "^2.1.0",
+    "dotenv": "^16.0.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "fastify": "^4.2.1",
+    "puppeteer": "^15.4.0",
+    "puppeteer-extra": "^3.3.4",
+    "puppeteer-extra-plugin-adblocker": "^2.13.4",
+    "puppeteer-extra-plugin-anonymize-ua": "^2.4.4",
+    "puppeteer-extra-plugin-stealth": "^2.11.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.20.0"
+  }
+}
