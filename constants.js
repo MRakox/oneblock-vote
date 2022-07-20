@@ -24,7 +24,7 @@ export const CAPTCHA_TIMEOUT = 300000;
 export const VOTE_TIMEOUT = 300000;
 
 // every 30 minutes
-export const CRON_TIME = '*/30 * * * *';
+export const CRON_TIME = '*/5 * * * *';
 
 export const VOTE_URL = 'https://oneblock.fr/vote';
 
