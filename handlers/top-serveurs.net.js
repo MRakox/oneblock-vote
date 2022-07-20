@@ -1,5 +1,5 @@
-// import solve from '../solve';
-import { randomClickDelay } from '../utils';
+// import solve from '../solve.js';
+import { randomClickDelay } from '../utils.js';
 
 /** @param {import('puppeteer').Page} page */
 export default async function handle(page) {
