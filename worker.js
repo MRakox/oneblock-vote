@@ -3,9 +3,16 @@ import { Worker } from 'bullmq';
 import { join } from 'node:path';
 import puppeteer from './browser.js';
 import {
-  __dirname, EXTENSION_PATH, QUEUE_NAME, REDIS_CONNECTION, SCREENSHOT_PATH, TIMEOUT, VOTE_TIMEOUT,
+  __dirname,
+  EXTENSION_PATH,
+  QUEUE_NAME,
+  REDIS_CONNECTION,
+  SCREENSHOT_PATH,
+  TIMEOUT,
+  VOTE_TIMEOUT,
+  VOTE_URL,
 } from './constants.js';
-import { handle } from './scheduler.js';
+import { performance } from './utils.js';
 
 /** @param {import('puppeteer').Browser} browser */
 const exit = (browser, id) => new Promise((resolve) => {
@@ -26,14 +33,16 @@ const exit = (browser, id) => new Promise((resolve) => {
 });
 
 /** @param {import('bullmq').Job} job */
+// eslint-disable-next-line consistent-return
 async function processor(job) {
   /** @type {import('puppeteer').Browser} */
   let browser;
 
   try {
-    const startAt = Date.now();
+    // Initialize the performance measurement
+    const measure = performance();
 
-    // Initialize puppeteer and open Oneblock website in a new page
+    // Initialize puppeteer
     browser = await puppeteer
       .launch({
         headless: false,
@@ -46,51 +55,49 @@ async function processor(job) {
           '--disable-features=IsolateOrigins,site-per-process',
           '--disable-site-isolation-trials',
         ],
-      });
-    const home = await handle(browser);
-    await job.log(`Navigated to Oneblock vote page in ${Date.now() - startAt}ms`);
+      }).then(() => job.log(`[MAIN] Puppeteer launched in ${measure()}ms`));
 
-    // Check for the vote cooldown
-    const button = await home.waitForSelector(
-      `a[data-vote-id="${job.name}"]`,
-    );
-    const name = await button.evaluate((el) => el.innerText);
-    console.log(name);
-    await button.waitForSelector('.vote-timer', { hidden: true, timeout: VOTE_TIMEOUT }).catch(() => {
-      throw new Error(`${name} is still in the cooldown, please try again later...`);
-    });
+    // Open Oneblock website in a new page
+    const home = await browser.newPage();
+    await home.goto(VOTE_URL).then(() => job.log(`[ONEBLOCK] Page loaded in ${measure()}ms`));
+
+    // Fill in & submit the vote form
+    await home.waitForSelector('#stepNameInput').then((input) => input.type(process.env.MINECRAFT_USERNAME));
+    await home.click('div[data-vote-step] button[type="submit"]', { delay: TIMEOUT });
+    await job.log(`[ONEBLOCK] Navigated to vote page in ${measure()}ms`);
 
     // Click on the vote button
-    await home.waitForTimeout(TIMEOUT);
-    await button.click();
-    await job.log(`Clicked on the vote button in ${Date.now() - startAt}ms`);
-    await home.waitForTimeout(TIMEOUT);
+    const button = await home.waitForSelector(`a[data-vote-id="${job.name}"]`);
+    const name = await button.evaluate((el) => el.innerText);
+    await button.click().then(() => job.log(`[ONEBLOCK] The voting form has been successfully initiated in ${measure}ms`));
 
     // Find the vote page and wait for it to load
-    const page = (await browser.pages())
-      .find((p) => p.url().includes(name));
+    await home.waitForTimeout(TIMEOUT);
+    const page = (await browser.pages()).find((p) => p.url().includes(name));
     if (!page) {
-      throw new Error(`Could not find ${name} page`);
+      await exit(browser, job.id);
+      return 'You have already voted on this site, please wait a few moments and try again later...';
     }
-    await job.log(`Navigated to ${name} in ${Date.now() - startAt}ms`);
+    await job.log(`[VOTE] Navigated to ${name} in ${measure()}ms`);
 
     // Select the handler used to process the job depending on the vote site
-    const handler = await import(join(__dirname, 'handlers', `${name}.js`));
-    await handler.default(page);
+    await import(join(__dirname, 'handlers', `${name}.js`))
+      .then((handler) => handler.default(page, { print: job.log, measure }));
+    await job.log(`[VOTE] The vote has been successfully submitted in ${measure()}ms`);
 
     // Wait for the vote reward to be received
-    await home.bringToFront();
-    await home.focus('#content_vote');
-    await home.waitForSelector('#status-message > div', { timeout: VOTE_TIMEOUT, visible: true }).catch(() => {
+    await home.bringToFront().then(() => home.focus('#content_vote'));
+    await home.waitForSelector('#status-message > div', { visible: true, timeout: VOTE_TIMEOUT }).catch(() => {
       throw new Error(`${name} did not receive the vote reward, please try again later...`);
     });
+    await job.log(`[ONEBLOCK] The vote reward has been received in ${measure()}ms`);
 
     // Mark the job as completed & exit the browser
-    await job.log(`Successfully voted in ${Date.now() - startAt}ms on ${name} `);
+    await job.log(`[MAIN] The job has been successfully completed in ${measure(true)}ms`);
     await exit(browser, job.id);
   } catch (error) {
     // Exit the browser & throw the error
-    await exit(browser, job.id).catch(() => {});
+    await exit(browser, job.id).catch(console.error);
     throw error;
   }
 }
