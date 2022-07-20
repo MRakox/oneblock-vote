@@ -17,6 +17,7 @@ specifiers:
   puppeteer-extra-plugin-adblocker: ^2.13.4
   puppeteer-extra-plugin-anonymize-ua: ^2.4.4
   puppeteer-extra-plugin-stealth: ^2.11.0
+  xvfb: ^0.4.0
 
 dependencies:
   '@bull-board/api': 4.0.1
@@ -34,6 +35,7 @@ dependencies:
   puppeteer-extra-plugin-adblocker: 2.13.4_un2omtomn7scfnrukttl2wynlu
   puppeteer-extra-plugin-anonymize-ua: 2.4.4_puppeteer-extra@3.3.4
   puppeteer-extra-plugin-stealth: 2.11.0_puppeteer-extra@3.3.4
+  xvfb: 0.4.0
 
 devDependencies:
   eslint: 8.20.0
@@ -1664,6 +1666,11 @@ packages:
       msgpackr-extract: 2.0.2
     dev: false
 
+  /nan/2.16.0:
+    resolution: {integrity: sha512-UdAqHyFngu7TfQKsCBgAA6pWDkT8MAO7d0jyOecVhN5354xbLqdn8mV9Tat9gepAupm0bt2DbeaSC8vS52MuFA==}
+    dev: false
+    optional: true
+
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
@@ -2269,6 +2276,15 @@ packages:
       object-inspect: 1.12.2
     dev: false
 
+  /sleep/6.1.0:
+    resolution: {integrity: sha512-Z1x4JjJxsru75Tqn8F4tnOFeEu3HjtITTsumYUiuz54sGKdISgLCek9AUlXlVVrkhltRFhNUsJDJE76SFHTDIQ==}
+    engines: {node: '>=0.8.0'}
+    requiresBuild: true
+    dependencies:
+      nan: 2.16.0
+    dev: false
+    optional: true
+
   /sonic-boom/3.0.0:
     resolution: {integrity: sha512-p5DiZOZHbJ2ZO5MADczp5qrfOd3W5Vr2vHxfCpe7G4AzPwVOweIjbfgku8wSQUuk+Y5Yuo8W7JqRe6XKmKistg==}
     dependencies:
@@ -2501,6 +2517,12 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: false
+
+  /xvfb/0.4.0:
+    resolution: {integrity: sha512-g55AbjcBL4Bztfn7kiUrR0ne8mMUsFODDJ+HFGf5OuHJqKKccpExX2Qgn7VF2eImw1eoh6+riXHser1J4agrFA==}
+    optionalDependencies:
+      sleep: 6.1.0
     dev: false
 
   /yallist/4.0.0:

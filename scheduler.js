@@ -23,7 +23,7 @@ export async function handle(browser) {
 
 async function schedule() {
   // Initialize puppeteer and open Oneblock website in a new page
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: false });
   const page = await handle(browser);
 
   // Retrieve the next votes timestamps
