@@ -77,7 +77,7 @@ async function processor(job) {
     await handler.default(page);
 
     // Wait for the vote reward to be received
-    await home.waitForSelector('#status-message .alert-success', { timeout: VOTE_TIMEOUT }).catch(() => {
+    await home.waitForSelector('#status-message', { timeout: VOTE_TIMEOUT }).catch(() => {
       throw new Error(`${job.name} did not receive the vote reward [${job.data.vote_id}]`);
     });
 
