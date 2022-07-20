@@ -52,10 +52,12 @@ async function processor(job) {
 
     // Check for the vote cooldown
     const button = await home.waitForSelector(
-      `a[data-vote-id="${job.data.vote_id}"]`,
+      `a[data-vote-id="${job.name}"]`,
     );
+    const name = await button.evaluate((el) => el.innerText);
+    console.log(name);
     await button.waitForSelector('.vote-timer', { hidden: true, timeout: VOTE_TIMEOUT }).catch(() => {
-      throw new Error(`${job.name} is still in the cooldown, please try again later [${job.data.vote_id}]`);
+      throw new Error(`${name} is still in the cooldown, please try again later...`);
     });
 
     // Click on the vote button
@@ -66,25 +68,25 @@ async function processor(job) {
 
     // Find the vote page and wait for it to load
     const page = (await browser.pages())
-      .find((p) => p.url().includes(job.name));
+      .find((p) => p.url().includes(name));
     if (!page) {
-      throw new Error(`Could not find ${job.name} page [${job.data.vote_id}]`);
+      throw new Error(`Could not find ${name} page`);
     }
-    await job.log(`Navigated to ${job.name} in ${Date.now() - startAt}ms`);
+    await job.log(`Navigated to ${name} in ${Date.now() - startAt}ms`);
 
     // Select the handler used to process the job depending on the vote site
-    const handler = await import(join(__dirname, 'handlers', `${job.name}.js`));
+    const handler = await import(join(__dirname, 'handlers', `${name}.js`));
     await handler.default(page);
 
     // Wait for the vote reward to be received
     await home.bringToFront();
     await home.focus('#content_vote');
     await home.waitForSelector('#status-message > div', { timeout: VOTE_TIMEOUT, visible: true }).catch(() => {
-      throw new Error(`${job.name} did not receive the vote reward [${job.data.vote_id}]`);
+      throw new Error(`${name} did not receive the vote reward, please try again later...`);
     });
 
     // Mark the job as completed & exit the browser
-    await job.log(`Successfully voted in ${Date.now() - startAt}ms on ${job.name} [${job.data.vote_id}]`);
+    await job.log(`Successfully voted in ${Date.now() - startAt}ms on ${name} `);
     await exit(browser, job.id);
   } catch (error) {
     // Exit the browser & throw the error

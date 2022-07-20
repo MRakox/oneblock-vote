@@ -36,7 +36,7 @@ async function schedule() {
     .forEach(async ([id, time]) => {
       const jobs = await queue.getJobs();
       if (!jobs.find((job) => job.data === time)) {
-        await queue.add(id, time, time > Date.now() ? { delay: time - Date.now() } : {});
+        await queue.add(id, time, time === Date.now() ? { delay: time - Date.now() } : {});
       }
     });
 }
