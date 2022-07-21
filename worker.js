@@ -3,6 +3,8 @@ import { Worker } from 'bullmq';
 import { join } from 'node:path';
 import puppeteer from './browser.js';
 import {
+  __dirname,
+  EXTENSION_PATH,
   REDIS_CONNECTION,
   SCREENSHOT_PATH,
   TIMEOUT,
@@ -10,7 +12,6 @@ import {
   VOTE_URL,
   QUEUE_NAME,
 } from './constants.js';
-import { events, queues } from './server.js';
 import { performance } from './utils.js';
 
 /** @param {import('puppeteer').Browser} browser */
@@ -42,41 +43,59 @@ async function processor(job) {
     const measure = performance();
 
     // Initialize puppeteer
-    browser = await puppeteer.launch();
-    await job.log(`Puppeteer launched in ${measure()}ms`);
+    browser = await puppeteer
+      .launch({
+        headless: false,
+        ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
+        args: [
+          '--no-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-web-security',
+          `--load-extension=${EXTENSION_PATH}`,
+          '--disable-features=IsolateOrigins,site-per-process',
+          '--disable-site-isolation-trials',
+        ],
+      });
+    await job.log(`MAIN: Puppeteer launched in ${measure()}ms`);
 
     // Open Oneblock website in a new page
-    const [page] = await browser.pages();
-    await page.goto(VOTE_URL).then(() => job.log(`ONEBLOCK: Page loaded in ${measure()}ms`));
+    const home = await browser.newPage();
+    await home.goto(VOTE_URL).then(() => job.log(`ONEBLOCK: Page loaded in ${measure()}ms`));
 
     // Fill in & submit the vote form
-    await page.waitForSelector('#stepNameInput').then((input) => input.type(process.env.MINECRAFT_USERNAME));
-    await page.click('div[data-vote-step] button[type="submit"]', { delay: TIMEOUT });
-    await job.log(`Navigated to vote page in ${measure()}ms`);
+    await home.waitForSelector('#stepNameInput').then((input) => input.type(process.env.MINECRAFT_USERNAME));
+    await home.click('div[data-vote-step] button[type="submit"]', { delay: TIMEOUT });
+    await job.log(`ONEBLOCK: Navigated to vote page in ${measure()}ms`);
 
     // Click on the vote button
-    const button = await page.waitForSelector(`a[data-vote-id="${job.name}"]`, { visible: true });
+    const button = await home.waitForSelector(`a[data-vote-id="${job.name}"]`, { visible: true });
     const name = await button.evaluate((el) => el.innerText);
     await button.click({ delay: TIMEOUT })
-      .then(() => job.log(`The voting form has been successfully initiated in ${measure()}ms`));
+      .then(() => job.log(`ONEBLOCK: The voting form has been successfully initiated in ${measure()}ms`));
 
-    // Handle the job depending on the vote site
-    await job.log('Waiting for the vote to be submitted...');
-    const queue = queues[name];
-    if (!queue) throw new Error(`Unknown vote site: ${name}`);
-    await queue.add(name, process.env.MINECRAFT_USERNAME)
-      .then((handler) => handler.waitUntilFinished(events[name]));
-    await job.log(`The vote has been successfully submitted in ${measure()}ms`);
+    // Find the vote page and wait for it to load
+    await home.waitForTimeout(TIMEOUT);
+    const page = (await browser.pages()).find((p) => p.url().includes(name));
+    if (!page) {
+      await exit(browser, job.id);
+      return 'You have already voted on this site, please wait a few moments and try again later...';
+    }
+    await job.log(`VOTE: Navigated to ${name} in ${measure()}ms`);
+
+    // Select the handler used to process the job depending on the vote site
+    await import(join(__dirname, 'handlers', `${name}.js`))
+      .then((handler) => handler.default(page, { print: job.log, measure }));
+    await job.log(`VOTE: The vote has been successfully submitted in ${measure()}ms`);
 
     // Wait for the vote reward to be received
-    await page.bringToFront().then(() => page.focus('#content_vote'));
-    await page.waitForSelector('#status-message > div', { visible: true, timeout: VOTE_TIMEOUT }).catch(() => {
+    await home.bringToFront().then(() => home.focus('#content_vote'));
+    await home.waitForSelector('#status-message > div', { visible: true, timeout: VOTE_TIMEOUT }).catch(() => {
       throw new Error(`${name} did not receive the vote reward, please try again later...`);
     });
-    await job.log(`The vote reward has been received in ${measure()}ms`);
+    await job.log(`ONEBLOCK: The vote reward has been received in ${measure()}ms`);
 
     // Mark the job as completed & exit the browser
-    await job.log(`The job has been successfully completed in ${measure(true)}ms`);
+    await job.log(`MAIN: The job has been successfully completed in ${measure(true)}ms`);
     await exit(browser, job.id);
   } catch (error) {
     // Exit the browser & throw the error
