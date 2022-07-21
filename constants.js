@@ -29,5 +29,4 @@ export const VOTE_URL = 'https://oneblock.fr/vote';
 
 // eslint-disable-next-line no-underscore-dangle
 export const __dirname = dirname(fileURLToPath(import.meta.url));
-export const EXTENSION_PATH = join(__dirname, 'extensions');
 export const SCREENSHOT_PATH = join(__dirname, 'screenshots');

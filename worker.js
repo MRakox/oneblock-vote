@@ -4,7 +4,6 @@ import { join } from 'node:path';
 import puppeteer from './browser.js';
 import {
   __dirname,
-  EXTENSION_PATH,
   QUEUE_NAME,
   REDIS_CONNECTION,
   SCREENSHOT_PATH,
@@ -46,12 +45,11 @@ async function processor(job) {
     browser = await puppeteer
       .launch({
         headless: false,
-        ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
+        ignoreDefaultArgs: ['--enable-automation'],
         args: [
           '--no-sandbox',
           '--disable-dev-shm-usage',
           '--disable-web-security',
-          `--load-extension=${EXTENSION_PATH}`,
           '--disable-features=IsolateOrigins,site-per-process',
           '--disable-site-isolation-trials',
         ],
