@@ -10,6 +10,7 @@ import {
   TIMEOUT,
   VOTE_TIMEOUT,
   VOTE_URL,
+  QUEUE_NAME,
 } from './constants.js';
 import { performance } from './utils.js';
 

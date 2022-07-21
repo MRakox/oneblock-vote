@@ -15,3 +15,6 @@ export function performance(startAt = time.now()) {
     return parseInt(result, 10);
   };
 }
+
+// export const siteNameFromID = (id) => SITES[parseInt(id, 10) - 1];
+// export const siteIDFromName = (name) => (SITES.indexOf(name) + 1).toString();
