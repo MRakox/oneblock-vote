@@ -10,8 +10,6 @@ export const REDIS_CONNECTION = {
   },
 };
 
-export const QUEUE_NAME = 'Vote';
-
 // Delays in milliseconds
 export const MIN_TYPE_SPEED = 25;
 export const MAX_TYPE_SPEED = 75;
