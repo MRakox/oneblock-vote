@@ -18,6 +18,7 @@ specifiers:
   puppeteer-extra-plugin-adblocker: ^2.13.4
   puppeteer-extra-plugin-anonymize-ua: ^2.4.4
   puppeteer-extra-plugin-stealth: ^2.11.0
+  strip-ansi: ^7.0.1
 
 dependencies:
   '@bull-board/api': 4.0.1
@@ -33,6 +34,7 @@ dependencies:
   puppeteer-extra-plugin-adblocker: 2.13.4_un2omtomn7scfnrukttl2wynlu
   puppeteer-extra-plugin-anonymize-ua: 2.4.4_puppeteer-extra@3.3.4
   puppeteer-extra-plugin-stealth: 2.11.0_puppeteer-extra@3.3.4
+  strip-ansi: 7.0.1
 
 devDependencies:
   dotenv: 16.0.1
@@ -369,6 +371,11 @@ packages:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
     dev: true
+
+  /ansi-regex/6.0.1:
+    resolution: {integrity: sha512-n5M855fKb2SsfMIiFFoVrABHJC8QtHwVx+mHWP3QcEqBHYienj5dHSgjbxtC0WEZXYt4wcD6zrQElDPhFuZgfA==}
+    engines: {node: '>=12'}
+    dev: false
 
   /ansi-styles/4.3.0:
     resolution: {integrity: sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==}
@@ -2401,6 +2408,13 @@ packages:
     dependencies:
       ansi-regex: 5.0.1
     dev: true
+
+  /strip-ansi/7.0.1:
+    resolution: {integrity: sha512-cXNxvT8dFNRVfhVME3JAe98mkXDYN2O1l7jmcwMnOslDeESg1rF/OZMtK0nRAhiari1unG5cD4jG3rapUAkLbw==}
+    engines: {node: '>=12'}
+    dependencies:
+      ansi-regex: 6.0.1
+    dev: false
 
   /strip-bom/3.0.0:
     resolution: {integrity: sha512-vavAMRXOgBVNF6nyEEmL3DBK19iRpDcoIwW+swQ+CbGiu7lju6t+JklA1MHweoWtadgt4ISVUsXLyDq34ddcwA==}

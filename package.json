@@ -23,7 +23,8 @@
     "puppeteer-extra": "^3.3.4",
     "puppeteer-extra-plugin-adblocker": "^2.13.4",
     "puppeteer-extra-plugin-anonymize-ua": "^2.4.4",
-    "puppeteer-extra-plugin-stealth": "^2.11.0"
+    "puppeteer-extra-plugin-stealth": "^2.11.0",
+    "strip-ansi": "^7.0.1"
   },
   "devDependencies": {
     "dotenv": "^16.0.1",

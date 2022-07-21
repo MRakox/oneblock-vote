@@ -1,19 +1,34 @@
-import { CAPTCHA_TIMEOUT, TIMEOUT } from '../constants.js';
-import { randomClickDelay, randomTypeSpeed } from '../utils.js';
+import { spawn } from 'node:child_process';
+import { join } from 'node:path';
+import stripAnsi from 'strip-ansi';
+import { VOTE_TIMEOUT } from '../constants.js';
 
 /** @param {import('puppeteer').Page} page */
-export default async function handle(page) {
+export default async function handle(page, { job }) {
   // Wait for the captcha to be solved
-  await page.waitForSelector("iframe[data-hcaptcha-response*='_']", {
-    timeout: CAPTCHA_TIMEOUT,
-  }).catch(async () => {
-    await page.screenshot({ path: 'captcha.png' });
-    throw new Error('The captcha was not solved in time');
+  await page.close();
+
+  // Spawn a new instance of hCaptcha challenger
+  const handler = spawn(process.env.HCAPTCHA_CHALLENGER_ENTRYPOINT, [
+    join(process.env.HCAPTCHA_CHALLENGER_PATH, 'src', 'worker.py'),
+    process.env.MINECRAFT_USERNAME,
+  ], {
+    cwd: join(process.env.HCAPTCHA_CHALLENGER_PATH, 'src'),
   });
 
-  // Fill in & submit the vote form
-  await page.waitForTimeout(TIMEOUT);
-  await page.type('#pseudo', process.env.MINECRAFT_USERNAME, { delay: randomTypeSpeed() });
-  await page.waitForTimeout(TIMEOUT);
-  await page.click('#btnvote', { delay: randomClickDelay() });
+  // Wait for the captcha to be solved
+  // eslint-disable-next-line no-shadow
+  const solve = () => new Promise((resolve, reject) => {
+    handler.stdout.on('data', async (data) => {
+      const message = stripAnsi(data.toString());
+      await job.log(message);
+      const result = message.includes('RESULT:') && message.split('RESULT:')[1];
+      if (result) resolve(result);
+    });
+
+    setTimeout(reject, VOTE_TIMEOUT);
+  });
+
+  // Timeout the captcha if it's not solved
+  return solve();
 }

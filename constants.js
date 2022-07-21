@@ -20,7 +20,6 @@ export const MAX_CLICK_DELAY = 150;
 
 export const TIMEOUT = 500;
 // 5 minutes in milliseconds
-export const CAPTCHA_TIMEOUT = 300000;
 export const VOTE_TIMEOUT = 300000;
 
 // every 30 minutes

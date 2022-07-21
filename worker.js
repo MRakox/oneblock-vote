@@ -83,8 +83,9 @@ async function processor(job) {
     await job.log(`VOTE: Navigated to ${name} in ${measure()}ms`);
 
     // Select the handler used to process the job depending on the vote site
-    await import(join(__dirname, 'handlers', `${name}.js`))
-      .then((handler) => handler.default(page, { print: job.log, measure }));
+    await job.log('VOTE: Waiting for the captcha to be solved...');
+    const result = await import(join(__dirname, 'handlers', `${name}.js`))
+      .then((handler) => handler.default(page, { job, measure }));
     await job.log(`VOTE: The vote has been successfully submitted in ${measure()}ms`);
 
     // Wait for the vote reward to be received
@@ -97,6 +98,8 @@ async function processor(job) {
     // Mark the job as completed & exit the browser
     await job.log(`MAIN: The job has been successfully completed in ${measure(true)}ms`);
     await exit(browser, job.id);
+
+    return result;
   } catch (error) {
     // Exit the browser & throw the error
     await exit(browser, job.id).catch(console.error);
