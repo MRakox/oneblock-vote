@@ -5,7 +5,6 @@ import puppeteer from './browser.js';
 import {
   __dirname,
   EXTENSION_PATH,
-  QUEUE_NAME,
   REDIS_CONNECTION,
   SCREENSHOT_PATH,
   TIMEOUT,

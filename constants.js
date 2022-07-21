@@ -10,8 +10,6 @@ export const REDIS_CONNECTION = {
   },
 };
 
-export const QUEUE_NAME = 'Vote';
-
 // Delays in milliseconds
 export const MIN_TYPE_SPEED = 25;
 export const MAX_TYPE_SPEED = 75;
@@ -27,6 +25,8 @@ export const VOTE_TIMEOUT = 300000;
 export const CRON_TIME = '*/5 * * * *';
 
 export const VOTE_URL = 'https://oneblock.fr/vote';
+
+export const SITES = ['serveurs-minecraft.org', 'serveur-prive.net', 'top-serveurs.net'];
 
 // eslint-disable-next-line no-underscore-dangle
 export const __dirname = dirname(fileURLToPath(import.meta.url));
