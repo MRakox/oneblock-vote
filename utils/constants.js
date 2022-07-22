@@ -28,5 +28,5 @@ export const CRON_TIME = '*/5 * * * *';
 export const VOTE_URL = 'https://oneblock.fr/vote';
 
 // eslint-disable-next-line no-underscore-dangle
-export const __dirname = dirname(fileURLToPath(import.meta.url));
+export const __dirname = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const SCREENSHOT_PATH = join(__dirname, 'screenshots');
