@@ -72,7 +72,7 @@ async function processor(job) {
       .then(() => job.log(`ONEBLOCK: The voting form has been successfully initiated in ${measure()}ms`));
 
     // Find the vote page and wait for it to load
-    await home.waitForTimeout(TIMEOUT);
+    await home.waitForTimeout(TIMEOUT * 5);
     const page = (await browser.pages()).find((p) => p.url().includes(name));
     if (!page) {
       await exit(browser, job.id);
