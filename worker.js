@@ -11,7 +11,7 @@ import {
   VOTE_TIMEOUT,
   VOTE_URL,
 } from './utils/constants.js';
-import performance from './utils/performance';
+import performance from './utils/performance.js';
 
 /** @param {import('puppeteer').Browser} browser */
 const exit = (browser, id) => new Promise((resolve) => {
