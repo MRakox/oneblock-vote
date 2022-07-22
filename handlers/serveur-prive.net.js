@@ -9,8 +9,8 @@ export default async function handle(page, { job }) {
   await page.close();
 
   // Spawn a new instance of hCaptcha challenger
-  const handler = spawn(process.env.HCAPTCHA_CHALLENGER_ENTRYPOINT, [
-    join(process.env.HCAPTCHA_CHALLENGER_PATH, 'src', 'worker.py'),
+  const handler = spawn(process.env.CAPTCHA_CHALLENGER_ENTRYPOINT, [
+    join(process.env.CAPTCHA_CHALLENGER_PATH, 'src', 'worker.py'),
     process.env.MINECRAFT_USERNAME,
   ], {
     cwd: join(process.env.HCAPTCHA_CHALLENGER_PATH, 'src'),
@@ -20,18 +20,13 @@ export default async function handle(page, { job }) {
   // eslint-disable-next-line no-shadow
   const solve = () => new Promise((resolve, reject) => {
     handler.stdout.on('data', async (data) => {
-      // * DEBUG:
-      console.log(data.toString(), data);
       const message = stripAnsi(data.toString());
       await job.log(message);
       const result = message.includes('RESULT:') && message.split('RESULT:')[1];
       if (result) resolve(result);
     });
 
-    handler.stderr.on('data', (data) => console.log(data.toString()));
-    handler.on('error', (err) => console.error(err));
-    handler.on('close', (code) => console.log(`hCaptcha handler exited with code ${code}`));
-
+    handler.on('error', console.error);
     setTimeout(reject, VOTE_TIMEOUT);
   });
 
