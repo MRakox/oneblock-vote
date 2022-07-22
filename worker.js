@@ -1,4 +1,4 @@
-import { eachLimit } from 'async';
+import { eachLimit, retry } from 'async';
 import { Worker } from 'bullmq';
 import { join } from 'node:path';
 import puppeteer from './browser.js';
@@ -72,8 +72,11 @@ async function processor(job) {
       .then(() => job.log(`ONEBLOCK: The voting form has been successfully initiated in ${measure()}ms`));
 
     // Find the vote page and wait for it to load
-    await home.waitForTimeout(TIMEOUT * 5);
-    const page = (await browser.pages()).find((p) => p.url().includes(name));
+    const page = await retry(
+      { times: TIMEOUT, interval: TIMEOUT },
+      async () => (await browser.pages()).find((p) => p.url().includes(name))
+      || (() => { throw new Error('Page not found'); })(),
+    );
     if (!page) {
       await exit(browser, job.id);
       return 'You have already voted on this site, please wait a few moments and try again later...';
