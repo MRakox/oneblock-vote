@@ -3,7 +3,7 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter.js';
 import { FastifyAdapter } from '@bull-board/fastify';
 import { QueueScheduler, Queue } from 'bullmq';
 import fastify from 'fastify';
-import { QUEUE_NAME, REDIS_CONNECTION } from './constants.js';
+import { QUEUE_NAME, REDIS_CONNECTION } from './utils/constants.js';
 
 export const scheduler = new QueueScheduler(QUEUE_NAME, REDIS_CONNECTION);
 export const queue = new Queue(QUEUE_NAME, REDIS_CONNECTION);

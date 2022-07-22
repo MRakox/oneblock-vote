@@ -1,5 +1,5 @@
 import { CronJob } from 'cron';
-import { CRON_TIME } from './constants.js';
+import { CRON_TIME } from './utils/constants.js';
 import schedule from './scheduler.js';
 
 import './server.js';

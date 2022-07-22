@@ -1,5 +1,5 @@
-import { TIMEOUT } from '../constants.js';
-import { randomClickDelay } from '../utils.js';
+import { TIMEOUT } from '../utils/constants.js';
+import { randomClickDelay } from '../utils/random.js';
 
 /** @param {import('puppeteer').Page} page */
 export default async function handle(page) {

@@ -10,8 +10,8 @@ import {
   TIMEOUT,
   VOTE_TIMEOUT,
   VOTE_URL,
-} from './constants.js';
-import { performance } from './utils.js';
+} from './utils/constants.js';
+import performance from './utils/performance';
 
 /** @param {import('puppeteer').Browser} browser */
 const exit = (browser, id) => new Promise((resolve) => {

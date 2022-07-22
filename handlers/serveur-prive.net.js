@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import { join } from 'node:path';
 import stripAnsi from 'strip-ansi';
-import { VOTE_TIMEOUT } from '../constants.js';
+import { VOTE_TIMEOUT } from '../utils/constants.js';
 
 /** @param {import('puppeteer').Page} page */
 export default async function handle(page, { job }) {
