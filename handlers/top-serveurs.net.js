@@ -5,7 +5,7 @@ import { VOTE_TIMEOUT } from '../utils/constants.js';
 
 /** @param {import('puppeteer').Page} page */
 export default async function handle(page) {
-// Wait for the captcha to be solved
+  // Wait for the captcha to be solved
   await page.close();
 
   // Spawn a new instance of hCaptcha challenger
