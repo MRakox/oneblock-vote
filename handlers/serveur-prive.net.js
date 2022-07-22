@@ -20,6 +20,8 @@ export default async function handle(page, { job }) {
   // eslint-disable-next-line no-shadow
   const solve = () => new Promise((resolve, reject) => {
     handler.stdout.on('data', async (data) => {
+      // * DEBUG:
+      console.log(data.toString());
       const message = stripAnsi(data.toString());
       await job.log(message);
       const result = message.includes('RESULT:') && message.split('RESULT:')[1];
