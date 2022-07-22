@@ -13,7 +13,7 @@ export default async function handle(page, { job }) {
     join(process.env.CAPTCHA_CHALLENGER_PATH, 'src', 'worker.py'),
     process.env.MINECRAFT_USERNAME,
   ], {
-    cwd: join(process.env.HCAPTCHA_CHALLENGER_PATH, 'src'),
+    cwd: join(process.env.CAPTCHA_CHALLENGER_PATH, 'src'),
   });
 
   // Wait for the captcha to be solved
