@@ -44,7 +44,7 @@ async function processor(job) {
     // Initialize puppeteer
     browser = await puppeteer
       .launch({
-        headless: false,
+        headless: true,
         ignoreDefaultArgs: ['--enable-automation'],
         args: [
           '--no-sandbox',
