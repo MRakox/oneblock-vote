@@ -21,12 +21,16 @@ export default async function handle(page, { job }) {
   const solve = () => new Promise((resolve, reject) => {
     handler.stdout.on('data', async (data) => {
       // * DEBUG:
-      console.log(data.toString());
+      console.log(data.toString(), data);
       const message = stripAnsi(data.toString());
       await job.log(message);
       const result = message.includes('RESULT:') && message.split('RESULT:')[1];
       if (result) resolve(result);
     });
+
+    handler.stderr.on('data', (data) => console.log(data.toString()));
+    handler.on('error', (err) => console.error(err));
+    handler.on('close', (code) => console.log(`hCaptcha handler exited with code ${code}`));
 
     setTimeout(reject, VOTE_TIMEOUT);
   });
