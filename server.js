@@ -18,5 +18,5 @@ createBullBoard({
 
 app
   .register(serverAdapter.registerPlugin())
-  .listen({ port: process.env.SERVER_PORT })
+  .listen({ host: '0.0.0.0', port: process.env.SERVER_PORT })
   .then((adress) => console.log(`🚀 Server ready at ${adress}`));
