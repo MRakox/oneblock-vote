@@ -98,7 +98,7 @@ async function processor(job) {
 
     // Mark the job as completed & exit the browser
     await job.log(`MAIN: The job has been successfully completed in ${measure(true)}ms`);
-    await exit(browser, job.id);
+    await browser.close();
 
     return result;
   } catch (error) {
