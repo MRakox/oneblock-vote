@@ -14,6 +14,7 @@ async function schedule() {
   // Schedule the vote job if it's not already scheduled
   Object
     .entries(sites)
+    .filter(([id]) => !process.env.IGNORED_SITES?.includes(id))
     .forEach(async ([id, time]) => {
       const jobs = await queue.getJobs(['active', 'delayed', 'paused', 'wait', 'waiting', 'waiting-children']);
       if (!jobs.find((job) => job.data === time && job.name === id)) {
