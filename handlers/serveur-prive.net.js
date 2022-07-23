@@ -14,6 +14,8 @@ export default async function handle(page, { job }) {
     process.env.MINECRAFT_USERNAME,
   ], {
     cwd: join(process.env.CAPTCHA_CHALLENGER_PATH, 'src'),
+    stdio: 'pipe', // Pipe the output to the parent process
+
   });
 
   // Wait for the captcha to be solved
