@@ -21,11 +21,13 @@ export default async function handle(page) {
   // eslint-disable-next-line no-shadow
   const solve = () => new Promise((resolve, reject) => {
     handler.stdout.on('data', async (data) => {
+      console.log(data.toString());
       const message = stripAnsi(data.toString());
       const result = message?.includes('RESULT:') && message?.split('RESULT:')[1];
       if (result) resolve(result);
     });
 
+    handler.stderr.on('data', (data) => console.error(data.toString()));
     handler.on('error', console.error);
     setTimeout(reject, VOTE_TIMEOUT);
   });
