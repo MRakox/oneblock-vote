@@ -1,0 +1,22 @@
+version: '3.6'
+services:
+  redis:
+    image: redis:alpine
+    container_name: oneblock-redis
+    hostname: redis
+    ports:
+      - 6379:6379
+
+  oneblock:
+    build: .
+    image: oneblock:latest
+    container_name: oneblock
+    depends_on:
+      - redis
+    environment:
+      - CAPTCHA_CHALLENGER_PATH=/usr/src/app/hcaptcha-challenger
+      - CAPTCHA_CHALLENGER_ENTRYPOINT=python3
+      - MINECRAFT_USERNAME=Rakox
+      - REDIS_HOST=redis
+    ports:
+      - 7777:7777

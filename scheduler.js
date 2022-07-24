@@ -4,7 +4,7 @@ import { queue } from './server.js';
 async function schedule() {
   // Retrieve the next votes timestamps from the Oneblock website API
   /** @type {Object.<string, number>} */
-  const { sites } = await fetch(`https://oneblock.fr/vote/user/${process.env.MINECRAFT_USERNAME}`)
+  const sites = await fetch(`https://oneblock.fr/vote/user/${process.env.MINECRAFT_USERNAME}`)
     .then((res) => res.json())
     .catch((err) => {
       console.error('[SCHEDULER] An error occured while fetching the Oneblock website API:');
