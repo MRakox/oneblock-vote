@@ -4,8 +4,8 @@ services:
     image: redis:alpine
     container_name: oneblock-redis
     hostname: redis
-    ports:
-      - 6379:6379
+    expose:
+      - 6379
 
   oneblock:
     build: .
@@ -19,4 +19,4 @@ services:
       - MINECRAFT_USERNAME=Rakox
       - REDIS_HOST=redis
     ports:
-      - 7777:7777
+      - 127.0.0.1:7777:7777
