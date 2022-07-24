@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
+import { TIMEOUT } from 'node:dns';
 import { join } from 'node:path';
 import stripAnsi from 'strip-ansi';
-import { VOTE_TIMEOUT } from '../utils/constants.js';
 
 /** @param {import('puppeteer').Page} page */
 export default async function handle(page) {
@@ -27,9 +27,9 @@ export default async function handle(page) {
       if (result) resolve(result);
     });
 
-    handler.stderr.on('data', (data) => console.error(data.toString()));
     handler.on('error', console.error);
-    setTimeout(reject, VOTE_TIMEOUT);
+    handler.stderr.on('data', (data) => console.error(data.toString()));
+    handler.on('exit', (code) => setTimeout(() => reject(new Error(`The vote handler exited with code ${code}`)), TIMEOUT));
   });
 
   // Timeout the captcha if it's not solved
