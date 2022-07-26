@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y git
 RUN git clone https://github.com/MRakox/hcaptcha-challenger
 
 # Install chrome binaries
-RUN apt-get install chromium-browser
+RUN apt-get install -y chromium
 
 # Install dependencies with pip3
 RUN cd hcaptcha-challenger && pip3 install -r requirements.txt
