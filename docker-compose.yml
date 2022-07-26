@@ -8,7 +8,9 @@ services:
       - 6379
 
   oneblock:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.arm64
     image: oneblock:latest
     container_name: oneblock
     depends_on:
