@@ -20,5 +20,8 @@ services:
       - CAPTCHA_CHALLENGER_ENTRYPOINT=python3
       - MINECRAFT_USERNAME=Rakox
       - REDIS_HOST=redis
+    volumes:
+      - ./screenshots:/usr/src/app/screenshots
+      - ./database:/usr/src/app/hcaptcha_challenger/src/database
     ports:
       - 127.0.0.1:7777:7777
