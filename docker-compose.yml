@@ -19,6 +19,6 @@ services:
       - REDIS_HOST=redis
     volumes:
       - ./screenshots:/usr/src/app/screenshots
-      - ./database:/usr/src/app/hcaptcha_challenger/src/database
+      - ./database:/usr/src/app/hcaptcha-challenger/src/database
     ports:
       - 127.0.0.1:7777:7777

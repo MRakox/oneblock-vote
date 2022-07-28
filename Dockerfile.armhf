@@ -6,8 +6,8 @@ WORKDIR /usr/src/app
 # Bundle app source
 COPY . /usr/src/app
 
-# Install python3
-RUN apt-get update && apt-get install -y python3 python3-pip
+# Install python3.6
+RUN apt-get update && apt-get install -y python3.6 python3-pip
 
 # Install dependencies with pnpm
 RUN npm install -g pnpm
