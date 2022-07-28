@@ -8,6 +8,7 @@ COPY . /usr/src/app
 
 # Install python3.6
 RUN apt-get update && apt-get install -y python3.6 python3-pip
+RUN pip3 install --upgrade pip setuptools wheel
 
 # Install dependencies with pnpm
 RUN npm install -g pnpm
