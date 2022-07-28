@@ -8,7 +8,7 @@ services:
       - 6379
 
   oneblock:
-    image: oneblock:latest
+    image: rakox/oneblock-vote:latest
     container_name: oneblock
     depends_on:
       - redis
