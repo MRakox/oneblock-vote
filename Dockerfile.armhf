@@ -27,7 +27,7 @@ RUN apt-get install -y chromium
 RUN apt-get install -y cmake
 
 # Install dependencies with pip3
-RUN cd hcaptcha-challenger && pip3 install -r requirements.txt
+RUN cd hcaptcha-challenger && pip3 install --index-url=https://www.piwheels.org/simple --no-cache-dir -r requirements.txt
 RUN cd hcaptcha-challenger/src && python3 main.py install
 
 CMD ["node", "index.js"]
