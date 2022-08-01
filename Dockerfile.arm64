@@ -19,7 +19,8 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
     && rm google-chrome-stable_current_amd64.deb
 
 # Install dependencies with pip3
-RUN cd hcaptcha-challenger && pip3 install -r requirements.txt
+RUN cd hcaptcha-challenger && pip3 install -r requirements.txt \
+    && pip3 install Pillow && pip3 install --no-dependencies byerecaptcha
 
 # Install ONNX models
 RUN cd hcaptcha-challenger/src && python3 main.py install
