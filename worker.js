@@ -73,7 +73,7 @@ async function processor(job) {
 
     // Find the vote page and wait for it to load
     const page = await retry(
-      { times: TIMEOUT, interval: TIMEOUT },
+      { times: TIMEOUT / 10, interval: TIMEOUT },
       async () => (await browser.pages()).find((p) => p.url().includes(name))
       || (() => { throw new Error('Page not found'); })(),
     );
