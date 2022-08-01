@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 
 # Install dependencies with pnpm
-RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store npm install -g pnpm && pnpm install
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store npm install -g pnpm && pnpm install --prod
 
 # Cache apt packages
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
