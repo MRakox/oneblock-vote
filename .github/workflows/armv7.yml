@@ -26,9 +26,9 @@ jobs:
         with:
           push: true
           context: ./
-          file: ./Dockerfile.armhf
+          file: ./Dockerfile.armv7
           platforms: linux/arm/v7
           builder: ${{ steps.buildx.outputs.name }}
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_IMAGE_NAME }}:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_IMAGE_NAME }}:armv7
           cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_IMAGE_NAME }}:buildcache,mode=max
