@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 
 # Install python3.9
-RUN apt-get update && apt-get install -y python3.9 python3-pip \
+RUN apt-get update && apt-get install -y python3.9 python3-pip git \
     && pip3 install --upgrade pip setuptools wheel
 
 # Install dependencies with pnpm
@@ -17,6 +17,9 @@ RUN npm install -g pnpm && pnpm install --prod
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
     && apt-get install -y ./google-chrome-stable_current_amd64.deb \
     && rm google-chrome-stable_current_amd64.deb
+
+# Clone the captcha-challenger service
+RUN git clone https://github.com/MRakox/hcaptcha-challenger.git
 
 # Install dependencies with pip3
 RUN cd hcaptcha-challenger && pip3 install -r requirements.txt \
