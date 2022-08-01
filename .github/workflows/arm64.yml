@@ -24,6 +24,6 @@ jobs:
         with:
           push: true
           context: ./
-          file: ./Dockerfile
+          file: ./Dockerfile.arm64
           builder: ${{ steps.buildx.outputs.name }}
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_IMAGE_NAME }}:latest
