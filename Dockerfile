@@ -10,7 +10,7 @@ COPY . /usr/src/app
 RUN apt-get update && apt-get upgrade
 
 # Install python3.6
-RUN apt-get update && apt-get install -y python3.6 python3-pip
+RUN apt-get install -y python3.6 python3-pip
 RUN pip3 install --upgrade pip setuptools wheel
 
 # Install dependencies with pnpm
@@ -18,7 +18,7 @@ RUN npm install -g pnpm
 RUN pnpm install
 
 # Install git
-RUN apt-get update && apt-get install -y git
+RUN apt-get install -y git
 
 # Clone captcha-solver repository
 RUN git clone https://github.com/MRakox/hcaptcha-challenger
