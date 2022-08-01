@@ -13,8 +13,6 @@ services:
     depends_on:
       - redis
     environment:
-      - CAPTCHA_CHALLENGER_PATH=/usr/src/app/hcaptcha-challenger
-      - CAPTCHA_CHALLENGER_ENTRYPOINT=python3
       - MINECRAFT_USERNAME=Rakox
       - REDIS_HOST=redis
     volumes:

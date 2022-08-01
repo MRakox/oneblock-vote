@@ -6,8 +6,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "node -r dotenv/config index.js",
     "dev": "DEBUG=puppeteer-extra,puppeteer-extra-plugin:* pnpm start",
-    "start": "node -r dotenv/config index.js"
+    "format": "eslint --fix ."
   },
   "author": "Rakox <rakox@zakary.fr>",
   "dependencies": {
