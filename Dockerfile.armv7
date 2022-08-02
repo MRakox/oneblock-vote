@@ -30,4 +30,5 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Install ONNX models
 RUN cd hcaptcha-challenger/src && python3 main.py install
 
-CMD ["node", "index.js"]
+ENTRYPOINT [ "node" ]
+CMD [ "index.js" ]
