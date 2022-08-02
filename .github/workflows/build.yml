@@ -1,4 +1,4 @@
-name: CI to Docker Hub (armv7)
+name: CI to Docker Hub
 
 on:
   workflow_dispatch:
@@ -42,9 +42,9 @@ jobs:
           push: true
           context: ./
           file: ./Dockerfile.armv7
-          platforms: linux/arm/v7
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           builder: ${{ steps.buildx.outputs.name }}
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_IMAGE_NAME }}:armv7
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_IMAGE_NAME }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
