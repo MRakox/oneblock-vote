@@ -16,7 +16,7 @@ async function schedule() {
     .entries(sites)
     .filter(([id]) => !process.env.IGNORED_SITES?.includes(id))
     .forEach(async ([id, time]) => {
-      const jobs = await queue.getJobs(['active', 'delayed', 'paused', 'wait', 'waiting', 'waiting-children']);
+      const jobs = await queue.getJobs(['active', 'completed', 'delayed', 'paused', 'wait', 'waiting', 'waiting-children']);
       if (!jobs.find((job) => job.data === time && job.name === id)) {
         await queue.add(id, time, time > Date.now() ? { delay: time - Date.now() } : {});
       }
