@@ -1,20 +1,31 @@
 import fetch from 'node-fetch';
 import { queue } from './server.js';
 
-async function schedule() {
-  // Retrieve the next votes timestamps from the Oneblock website API
-  /** @type {Object.<string, number>} */
-  const { sites } = await fetch(`https://oneblock.fr/vote/user/${process.env.MINECRAFT_USERNAME}`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.error('[SCHEDULER] An error occured while fetching the Oneblock website API:');
-      console.error(err);
-    });
+/**
+ * Fetch the next votes timestamps from the Oneblock website API for the given user
+ * @param {string} username The username of the user
+ * @returns {Promise<{ sites: Object.<string, number> }>}
+ */
+export async function fetchUser(username) {
+  const response = await fetch(`https://oneblock.fr/vote/user/${username}`);
+  const { sites, ...body } = await response.json();
+  if (!response.ok || !sites) throw body;
+  return sites;
+}
 
-  // Schedule the vote job if it's not already scheduled
+/**
+ * Schedule the next votes jobs for the given user
+ * @param {string} username The username of the user
+ */
+async function schedule(username) {
+  // Retrieve the next votes timestamps from the Oneblock website API
+  const sites = await fetchUser(username);
+
+  // Schedule the vote jobs if they're not already scheduled
   Object
     .entries(sites)
-    .filter(([id]) => !process.env.IGNORED_SITES?.includes(id))
+    // TODO:
+    // .filter(([id]) => !process.env.IGNORED_SITES?.includes(id))
     .forEach(async ([id, time]) => {
       const jobs = await queue.getJobs(['active', 'completed', 'delayed', 'paused', 'wait', 'waiting', 'waiting-children']);
       if (!jobs.find((job) => job.data === time && job.name === id)) {
