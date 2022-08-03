@@ -16,7 +16,7 @@ export const client = S.object()
  */
 export async function connect(request, reply) {
   // Retrieve the client from the request body
-  const { id, username, proxy } = request.body;
+  const { username, proxy } = request.body;
 
   // TODO: Check if the client is already connected
 
@@ -36,13 +36,13 @@ export async function connect(request, reply) {
 
   // Schedule the next vote jobs
   try {
-    await schedule(username);
+    await schedule(username, request.body);
   } catch (err) {
     // TODO: LOG ERROR
     return reply.status(500).send({ error: 'SCHEDULER_ERROR' });
   }
 
-  return reply.status(200).send({ id });
+  return reply.status(200).send(request.body);
 }
 
 export function disconnect() {}

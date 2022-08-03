@@ -5,11 +5,11 @@ import { QueueScheduler, Queue } from 'bullmq';
 import fastify from 'fastify';
 
 import { client, connect, disconnect } from './routes/clients.js';
-import { QUEUE_NAME, REDIS_CONNECTION } from './utils/constants.js';
+import { QUEUES, REDIS_CONNECTION } from './utils/constants.js';
 
 // Initialize BullMQ queue and scheduler
-export const scheduler = new QueueScheduler(QUEUE_NAME, REDIS_CONNECTION);
-export const queue = new Queue(QUEUE_NAME, REDIS_CONNECTION);
+export const schedulers = QUEUES.map((name) => new QueueScheduler(name, REDIS_CONNECTION));
+export const queues = QUEUES.map((name) => new Queue(name, REDIS_CONNECTION));
 
 // Initialize Fastify server
 const app = fastify();
@@ -17,7 +17,7 @@ const serverAdapter = new FastifyAdapter();
 
 // Initialize BullBoard API
 createBullBoard({
-  queues: [new BullMQAdapter(queue)],
+  queues: queues.map((queue) => new BullMQAdapter(queue)),
   serverAdapter,
 });
 
