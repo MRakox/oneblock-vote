@@ -29,7 +29,7 @@ export async function connect(request, reply) {
 
   // Check if the provided proxy is valid
   try {
-    await checkProxy(proxy);
+    request.body.ip = await checkProxy(proxy);
   } catch {
     return reply.status(400).send({ error: 'INVALID_PROXY' });
   }

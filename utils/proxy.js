@@ -1,29 +1,21 @@
-import { request as fetch } from 'http';
+import HttpsProxyAgent from 'https-proxy-agent';
+import fetch from 'node-fetch';
 
 export const PROXY_ERROR_CODE = 'PROXY_ERROR';
 
 /**
  * Check whether the provided proxy is working
- * NOTE: The promise will reject if the proxy is not working or if the request failed
+ * NOTE: The promise will reject if the proxy is not working or if the request failed.
+ *       Otherwise, the proxy ip adress will be returned.
  * @param {string} proxy The proxy to check
+ * @returns {Promise<string>} The proxy ip adress
  */
-export default function checkProxy(proxy) {
-  return new Promise((resolve, reject) => {
-    // Connect to google.com to check if the proxy is working
-    const request = fetch({
-      path: 'www.google.com:443',
-      method: 'CONNECT',
-      timeout: 1000,
-      agent: false,
-      // Proxy connection settings
-      host: new URL(proxy).hostname,
-      port: new URL(proxy).port,
-    });
-    // Listen on the socket for the response and handle it
-    request
-      .on('connect', (res) => (request.destroy() && res.statusCode === 200 ? resolve() : reject(PROXY_ERROR_CODE)))
-      .on('timeout', () => request.destroy())
-      .on('error', (err) => reject((err && err.code) || PROXY_ERROR_CODE))
-      .end();
-  });
+export default async function checkProxy(proxy) {
+  const request = await fetch(
+    'https://api.ipify.org/?format=json',
+    { agent: new HttpsProxyAgent(proxy) },
+  );
+  const { ip } = await request.json();
+  if (!ip) throw PROXY_ERROR_CODE;
+  return ip;
 }

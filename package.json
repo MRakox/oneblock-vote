@@ -19,6 +19,7 @@
     "cron": "^2.1.0",
     "fastify": "^4.2.1",
     "fluent-json-schema": "^3.1.0",
+    "https-proxy-agent": "^5.0.1",
     "node-fetch": "^3.2.9",
     "puppeteer": "^15.4.0",
     "puppeteer-extra": "^3.3.4",
