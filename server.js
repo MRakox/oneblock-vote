@@ -4,7 +4,7 @@ import { FastifyAdapter } from '@bull-board/fastify';
 import { QueueScheduler, Queue } from 'bullmq';
 import fastify from 'fastify';
 
-import { connect, disconnect } from './routes/clients.js';
+import { client, connect, disconnect } from './routes/clients.js';
 import { QUEUE_NAME, REDIS_CONNECTION } from './utils/constants.js';
 
 // Initialize BullMQ queue and scheduler
@@ -22,7 +22,7 @@ createBullBoard({
 });
 
 // Register routes
-app.post('/', connect);
+app.post('/', { schema: { body: client } }, connect);
 app.delete('/', disconnect);
 
 // Register BullBoard API routes & start the server

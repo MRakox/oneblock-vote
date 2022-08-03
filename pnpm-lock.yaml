@@ -11,6 +11,7 @@ specifiers:
   eslint-config-airbnb-base: ^15.0.0
   eslint-plugin-import: ^2.26.0
   fastify: ^4.2.1
+  fluent-json-schema: ^3.1.0
   node-fetch: ^3.2.9
   puppeteer: ^15.4.0
   puppeteer-extra: ^3.3.4
@@ -26,6 +27,7 @@ dependencies:
   bullmq: 1.86.7
   cron: 2.1.0
   fastify: 4.2.1
+  fluent-json-schema: 3.1.0
   node-fetch: 3.2.9
   puppeteer: 15.4.0
   puppeteer-extra: 3.3.4_puppeteer@15.4.0
@@ -1088,6 +1090,13 @@ packages:
   /flatted/3.2.6:
     resolution: {integrity: sha512-0sQoMh9s0BYsm+12Huy/rkKxVu4R1+r96YX5cG44rHV0pQ6iC3Q+mkoMFaGWObMFYQxCVT+ssG1ksneA2MI9KQ==}
     dev: true
+
+  /fluent-json-schema/3.1.0:
+    resolution: {integrity: sha512-Ft7WGihiwpcZkZsJuXVCcEHLDOJ1vGS4wFK8V08xWffFthadgjwpSExfBWz/72VxHZ0xe7/N3T38hOxskwxd3A==}
+    engines: {node: '>=12'}
+    dependencies:
+      deepmerge: 4.2.2
+    dev: false
 
   /for-in/0.1.8:
     resolution: {integrity: sha512-F0to7vbBSHP8E3l6dCjxNOLuSFAACIxFy3UehTUlG7svlXi37HHsDkyVcHo0Pq8QwrE+pXvWSVX3ZT1T9wAZ9g==}
