@@ -49,7 +49,11 @@ async function schedule(options) {
       const queue = getQueue(id);
       // TODO:
       // if (!queue) {}
-      await queue.add(options.ip, options, getDelay(time));
+      const jobs = await queue.getJobs(['active', 'delayed', 'paused', 'waiting']);
+      // If the job isn't already in the queue, schedule it
+      if (!jobs.some((job) => job.name === options.ip)) {
+        await queue.add(options.ip, options, getDelay(time));
+      }
     });
 }
 
