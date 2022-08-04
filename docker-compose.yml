@@ -3,9 +3,12 @@ services:
   redis:
     image: redis:alpine
     container_name: oneblock-redis
+    command: redis-server --save 60 1 --loglevel warning
     hostname: redis
     expose:
       - 6379
+    volumes:
+      - ./redis:/data
 
   server:
     build: ./server
