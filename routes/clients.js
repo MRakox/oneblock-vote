@@ -36,7 +36,7 @@ export async function connect(request, reply) {
 
   // Schedule the next vote jobs
   try {
-    await schedule(username, request.body);
+    await schedule(request.body);
   } catch (err) {
     // TODO: LOG ERROR
     return reply.status(500).send({ error: 'SCHEDULER_ERROR' });

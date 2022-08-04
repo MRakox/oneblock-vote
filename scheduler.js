@@ -29,12 +29,16 @@ const getDelay = (timestamp) => (timestamp > Date.now() ? { delay: timestamp - D
 
 /**
  * Schedule the next votes jobs for the given user
- * @param {string} username The username of the user
- * @param {object} data The data to pass to the job
+ * @param {{
+ *  id: string,
+ *  ip: string,
+ *  proxy: string,
+ *  username: string
+ * }} options The job options
  */
-async function schedule(username, data = {}) {
+async function schedule(options) {
   // Retrieve the next votes timestamps from the Oneblock website API
-  const sites = await fetchUser(username);
+  const sites = await fetchUser(options.username);
 
   // Schedule the vote jobs if they're not already scheduled
   Object
@@ -45,7 +49,7 @@ async function schedule(username, data = {}) {
       const queue = getQueue(id);
       // TODO:
       // if (!queue) {}
-      await queue.add(username, data, getDelay(time));
+      await queue.add(options.ip, options, getDelay(time));
     });
 }
 
