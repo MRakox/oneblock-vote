@@ -11,16 +11,6 @@ export const REDIS_CONNECTION = {
   },
 };
 
-// A list of names of the queues used by the application
-// NOTE: It corresponds to the names of the votes sites
-export const QUEUES = [
-  'serveurs-minecraft.org',
-  'serveur-prive.net',
-  'top-serveurs.net',
-];
-
-export const QUEUE_NAME = 'Vote';
-
 // Delays in milliseconds
 export const MIN_TYPE_SPEED = 25;
 export const MAX_TYPE_SPEED = 75;

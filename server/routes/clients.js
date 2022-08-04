@@ -18,8 +18,6 @@ export async function connect(request, reply) {
   // Retrieve the client from the request body
   const { username, proxy } = request.body;
 
-  // TODO: Check if the client is already connected
-
   // Check if the provided username is valid
   try {
     await fetchUser(username);

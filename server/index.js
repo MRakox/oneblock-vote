@@ -27,5 +27,5 @@ app.delete('/', disconnect);
 
 // Register BullBoard API routes & start the server
 app.register(serverAdapter.registerPlugin())
-  .listen({ host: '0.0.0.0', port: process.env.SERVER_PORT || 7777 })
+  .listen({ host: '0.0.0.0', port: process.env.SERVER_PORT })
   .then((adress) => console.log(`🚀 Server ready at ${adress}`));

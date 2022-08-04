@@ -7,16 +7,15 @@ services:
     expose:
       - 6379
 
-  oneblock:
-    image: rakox/oneblock-vote:latest
-    container_name: oneblock
+  server:
+    build: ./server
+    container_name: oneblock-server
     depends_on:
       - redis
     environment:
-      - MINECRAFT_USERNAME=Rakox
+      - SERVER_PORT=8080
       - REDIS_HOST=redis
-    volumes:
-      - ./screenshots:/usr/src/app/screenshots
-      - ./database:/usr/src/app/hcaptcha-challenger/src/database
+      - REDIS_PORT=6379 # optional
+      - REDIS_PASSWORD= # optional
     ports:
-      - 127.0.0.1:7777:7777
+      - 127.0.0.1:8080:8080

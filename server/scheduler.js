@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { queues } from './server.js';
+import { queues } from './index.js';
 
 /**
  * Fetch the next votes timestamps from the Oneblock website API for the given user
