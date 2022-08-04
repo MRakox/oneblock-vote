@@ -27,6 +27,9 @@ export async function connect(request, reply) {
   // Check if the provided proxy is valid
   try {
     request.body.ip = await checkProxy(proxy);
+    if (request.ip !== request.body.ip) {
+      return reply.status(409).send({ error: 'PROXY_CONFLICT' });
+    }
   } catch {
     return reply.status(400).send({ error: 'INVALID_PROXY' });
   }
